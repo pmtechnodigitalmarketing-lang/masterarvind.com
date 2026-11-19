@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { motion, useMotionValue, useTransform, animate, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  animate,
+  AnimatePresence,
+} from "framer-motion";
 import { Link } from "react-router-dom";
 import { X, ChevronLeft } from "lucide-react";
 import "./CarouselStacked.css";
@@ -64,8 +70,8 @@ const CarouselStacked = ({ slides }) => {
       // Close if user scrolls down (moving past the section)
       if (currentScrollY > startScrollY + 50) {
         setActiveSlide(null);
-      } 
-      // If user scrolls up, reset the start point so we only close on a definitive scroll down
+      }
+      // If user scrolls up, reset the start point so we only on a definitive scroll down
       else if (currentScrollY < startScrollY) {
         startScrollY = currentScrollY;
       }
@@ -75,10 +81,7 @@ const CarouselStacked = ({ slides }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [activeSlide]);
 
-  const config = useMemo(
-    () => getCarouselConfig(windowWidth),
-    [windowWidth],
-  );
+  const config = useMemo(() => getCarouselConfig(windowWidth), [windowWidth]);
 
   const handleDragStart = () => {
     startProgress.current = scrollProgress.get();
@@ -142,7 +145,7 @@ const CarouselStacked = ({ slides }) => {
             transition={{ duration: 0.4 }}
           >
             <div className="inline-left">
-              <motion.img 
+              <motion.img
                 layoutId={`card-image-${activeSlide.title}`}
                 src={activeSlide.image}
                 alt={activeSlide.title}
@@ -151,7 +154,7 @@ const CarouselStacked = ({ slides }) => {
             </div>
 
             <div className="inline-right">
-              <button 
+              <button
                 className="inline-back-btn"
                 onClick={() => setActiveSlide(null)}
                 title="Back"
@@ -168,8 +171,12 @@ const CarouselStacked = ({ slides }) => {
                 <div className="inline-badge">{activeSlide.badge}</div>
                 <h3 className="inline-title">{activeSlide.title}</h3>
                 <p className="inline-description">{activeSlide.description}</p>
-                
-                <Link to="/book" className="btn-primary" style={{ marginTop: '2rem', display: 'inline-block' }}>
+
+                <Link
+                  to="/book"
+                  className="btn-primary"
+                  style={{ marginTop: "2rem", display: "inline-block" }}
+                >
                   Book Session
                 </Link>
               </motion.div>
@@ -181,9 +188,18 @@ const CarouselStacked = ({ slides }) => {
   );
 };
 
-const Card = ({ slide, index, total, progress, config, handleDragStart, handleDragEnd, setActiveSlide }) => {
+const Card = ({
+  slide,
+  index,
+  total,
+  progress,
+  config,
+  handleDragStart,
+  handleDragEnd,
+  setActiveSlide,
+}) => {
   const isDragging = useRef(false);
-  
+
   const offset = useTransform(progress, (p) => {
     let diff = (index - p) % total;
     if (diff > total / 2) diff -= total;
@@ -226,7 +242,9 @@ const Card = ({ slide, index, total, progress, config, handleDragStart, handleDr
         progress.set(progress.get() + delta);
       }}
       onPanEnd={(e, info) => {
-        setTimeout(() => { isDragging.current = false; }, 100);
+        setTimeout(() => {
+          isDragging.current = false;
+        }, 100);
         handleDragEnd(e, info);
       }}
       onClick={() => {
@@ -264,9 +282,7 @@ const Card = ({ slide, index, total, progress, config, handleDragStart, handleDr
 
       <div className="carousel-card-gradient" />
 
-      <div className="carousel-badge">
-        {slide.badge}
-      </div>
+      <div className="carousel-badge">{slide.badge}</div>
 
       <div className="carousel-card-content">
         <motion.p
